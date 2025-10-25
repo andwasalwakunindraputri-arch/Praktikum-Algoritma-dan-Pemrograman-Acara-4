@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistem Informasi Statistik Boyolali</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* ====== UMUM ====== */
+        body {
+        font-family: 'Poppins', sans-serif;
+        margin: 0;
+        padding: 0;
+        background-image: linear-gradient(to bottom right, rgba(233, 231, 255, 0.7), rgba(204, 195, 242, 0.7)), 
+                      url('Gedung-Lembu-Sora-Boyolali.-Solopos-dok-555x370.jpg'); /* ganti dengan nama file gambarmu */
+        background-size: cover;       /* agar gambar menutupi seluruh layar */
+        background-position: center;  /* posisi gambar di tengah */
+        background-attachment: fixed; /* biar gambar tidak ikut scroll */
+        color: #2c2c2c;
+        }
+
+        h1, h2, h3 {
+            color: #2b3384;
+        }
+
+        .contentt {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 25px auto;
+            max-width: 1200px;
+        }
+
+        /* ====== HEADER ====== */
+        .logo {
+            width: 20%;
+            text-align: center;
+        }
+        .logo img {
+            width: 120px;
+            transition: transform 0.3s ease;
+        }
+        .logo img:hover {
+            transform: scale(1.1);
+        }
+
+        .judul {
+            width: 80%;
+            text-align: center;
+        }
+        .judul h1 {
+            margin: 0;
+            font-size: 2rem;
+            letter-spacing: 1px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        }
+        .judul h2 {
+            color: #5559b1;
+            margin-top: 5px;
+            font-style: italic;
+        }
+
+        /* ====== MENU ====== */
+        .list {
+            width: 25%;
+            background: linear-gradient(135deg, #2b3384, #4b56c2);
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+        .list ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+        .list li {
+            padding: 14px;
+            font-weight: 600;
+            color: #ffffff;
+            border-bottom: 1px solid rgba(255,255,255,0.2);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-radius: 8px;
+        }
+        .list li:hover {
+            background-color: #a1adf2;
+            color: #2b3384;
+            transform: translateX(5px);
+        }
+
+        /* ====== KONTEN ====== */
+        .tabel {
+            width: 75%;
+            padding: 25px;
+            background-color: #ffffff;
+            border-radius: 15px;
+            margin-left: 20px;
+            box-shadow: 0px 5px 15px rgba(0,0,0,0.15);
+            transition: all 0.3s ease;
+        }
+
+        .tabel:hover {
+            box-shadow: 0px 8px 20px rgba(0,0,0,0.2);
+        }
+
+        /* ====== TABEL DATA ====== */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        th {
+            background-color: #2b3384;
+            color: rgb(237, 196, 244);
+            padding: 12px;
+            text-transform: uppercase;
+        }
+        td {
+            text-align: center;
+            padding: 10px;
+            border: 1px solid #c9c9ef;
+            background-color: #c5bcf6;
+            transition: background-color 0.3s ease;
+        }
+        tr:hover td {
+            background-color: #c3bef5;
+        }
+
+        /* ====== PETA ====== */
+        .peta {
+            text-align: center;
+            margin: 20px auto;
+        }
+        .peta img {
+            width: 250px;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+            transition: transform 0.3s ease;
+        }
+        .peta img:hover {
+            transform: scale(1.05);
+        }
+
+        /* ====== KETERANGAN ====== */
+        .desc {
+            margin-top: 20px;
+            background-color: #b9bdef;
+            padding: 18px;
+            border-radius: 12px;
+            border-left: 5px solid #2b3384;
+        }
+
+        /* ====== GRAFIK ====== */
+        .chart-container {
+            margin-top: 25px;
+            background: #ffffff;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        /* ====== ANIMASI ====== */
+        .hidden {
+            display: none;
+        }
+        .fade-in {
+            animation: fade 0.6s;
+        }
+        @keyframes fade {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+    <div class="contentt">
+        <div class="logo">
+            <img src="Lambang_Kabupaten_Boyolali (1).jpeg" alt="Lambang Boyolali">
+        </div>
+        <div class="judul">
+            <h1>SISTEM INFORMASI STATISTIK</h1>
+            <h2><i>KABUPATEN BOYOLALI</i></h2>
+        </div>
+    </div>
+
+    <div class="contentt">
+        <div class="list">
+            <ul>
+                <li onclick="showContent('geografi')">Geografi</li>
+                <li onclick="showContent('penduduk')">Penduduk</li>
+                <li onclick="showContent('harapan')">Harapan Lama Sekolah</li>
+                <li onclick="showContent('rerata')">Rerata Lama Sekolah</li>
+                <li onclick="showContent('pendidikan')">Pendidikan di Boyolali</li>
+            </ul>
+        </div>
+
+        <div class="tabel">
+            <!-- ===== GEOGRAFI ===== -->
+            <div id="geografi" class="fade-in">
+                <h3>Karakteristik Geografi Kabupaten Boyolali</h3>
+                 <div class="peta">
+                    <img src="boyolali administrasi.jpg">
+                </div>
+                <p>
+                    Kabupaten Boyolali terletak di Provinsi Jawa Tengah, di antara 110°22'–110°50' BT dan 7°36'–7°71' LS. Wilayah ini berbatasan dengan Kabupaten Grobogan dan Semarang di utara, Karanganyar dan Sragen di timur, Klaten serta DIY di selatan, dan Magelang di barat. Kabupaten Boyolsli terdiri atas dataran rendah di bagian tengah serta daerah pegunungan di barat dan timur yang dikelilingi Gunung Merapi dan Merbabu. 
+                </p>
+                <table>
+                    <tr><th>Parameter</th><th>Keterangan</th></tr>
+                    <tr><td>Luas Wilayah</td><td>1.015,10 km²</td></tr>
+                    <tr><td>Jumlah Kecamatan</td><td>23</td></tr>
+                </table>
+            </div>
+
+            <!-- ===== PENDUDUK ===== -->
+            <div id="penduduk" class="hidden fade-in">
+                <h3>Jumlah Penduduk Per Kecamatan Kabupaten Boyolali (2025)</h3>
+                <div class="chart-container">
+                    <canvas id="pendudukChart"></canvas>
+                </div>
+                <div class="desc">
+                    <p>
+                        Jumlah penduduk di setiap kecamatan bervariasi cukup signifikan. Kecamatan Ngemplak dan Nogosari memiliki jumlah penduduk tertinggi, baik laki-laki maupun perempuan, yang menunjukkan kepadatan penduduk lebih tinggi dibanding kecamatan lainnya. Sementara itu, kecamatan seperti Selo, Tamansari, dan Wonosamodro memiliki jumlah penduduk terendah. Secara umum, jumlah penduduk laki-laki dan perempuan di setiap kecamatan relatif seimbang. Variasi ini menggambarkan perbedaan tingkat persebaran penduduk di Kabupaten Boyolali yang dipengaruhi oleh faktor geografis, ekonomi, dan ketersediaan fasilitas wilayah masing-masing.                    
+                    </p>
+                </div>
+            </div>
+
+            <!-- ===== HARAPAN LAMA SEKOLAH ===== -->
+            <div id="harapan" class="hidden fade-in">
+                <h3>Perbandingan Harapan Lama Sekolah (HLS) Tahun 2024</h3>
+                <table>
+                    <tr><th> </th><th>Laki-Laki</th><th>Perempuan</th><th>Jumlah</th></tr>
+                    <tr><td>Kabupaten Boyolali</td><td>12,39</td><td>13,43</td><td>12,67</td></tr>
+                    <tr><td>Provinsi Jawa Tengah</td><td>12,77</td><td>13,04</td><td>12,86</td></tr>
+                </table>
+                <div class="chart-container">
+                    <canvas id="hlsChart"></canvas>
+                </div>
+            </div>
+
+            <!-- ===== RERATA LAMA SEKOLAH ===== -->
+            <div id="rerata" class="hidden fade-in">
+                <h3>Perbandingan Rata-rata Lama Sekolah (RLS) Tahun 2024</h3>
+                <table>
+                    <tr><th> </th><th>Laki-Laki</th><th>Perempuan</th><th>Jumlah</th></tr>
+                    <tr><td>Kabupaten Boyolali</td><td>8,82</td><td>7,61</td><td>8,17</td></tr>
+                    <tr><td>Provinsi Jawa Tengah</td><td>8,43</td><td>7,63</td><td>8,02</td></tr>
+                </table>
+                <div class="chart-container">
+                    <canvas id="rlsChart"></canvas>
+                </div>
+            </div>
+
+            <!-- ===== PENDIDIKAN ===== -->
+            <div id="pendidikan" class="hidden fade-in">
+                <h3>Kondisi Pendidikan di Kabupaten Boyolali</h3>
+                <p>
+                    Pendidikan di Boyolali berkembang pesat, ditunjang oleh fasilitas pendidikan mulai dari tingkat dasar hingga perguruan tinggi. Pemerintah daerah fokus pada peningkatan kualitas tenaga pendidik serta pemerataan akses pendidikan di wilayah pedesaan.
+                </p>
+                <table>
+                     <tr><th>Pendidikan</th><th>TK</th><th>SD atau MI</th><th>SMP atau MTs</th><th>SMA atau MA</th><th>SMK</th><th>Perguruan tinggi</th><th>Lainnya</th></tr>
+                     <tr><td><b>Negeri</b></td><td>4</td><td>603</td><td>67</td><td>21</td><td>9</td><td>0</td><td>0</td></tr>
+                     <tr><td><b>Swasta</b></td><td>509</td><td>215</td><td>70</td><td>28</td><td>28</td><td>2</td><td>9</td></tr>
+                     <tr><td><b>Total</b></td><td>513</td><td>818</td><td>137</td><td>49</td><td>37</td><td>2</td><td>9</td></tr>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showContent(id) {
+            const sections = document.querySelectorAll('.tabel > div');
+            sections.forEach(sec => sec.classList.add('hidden'));
+            document.getElementById(id).classList.remove('hidden');
+        }
+
+        // === Grafik Penduduk ===
+        const ctxPenduduk = document.getElementById('pendudukChart');
+        new Chart(ctxPenduduk, {
+            type: 'bar',
+            data: {
+                labels: ['SELO','AMPEL','CEPOGO','MUSUK','BOYOLALI','MOJOSONGO','TERAS','SAWIT','BANYUDONO','SAMBI','NGEMPLAK','NOGOSARI','SIMO','KARANGGEDE','KLEGO','ANDONG','KEMUSU','WONOSEGORO','JUWANGI','GLADAGSARI','TAMANSARI','WONOSAMODRO'],
+                datasets: [
+                    {
+                        label: 'Jumlah Penduduk (Laki-laki)',
+                        data: [16101,21263,31606,16837,37775,31251,26416,16514,27225,24886,48099,38263,26612,24311,26211,32628,18584,20714,18561,22054,15507,16568],
+                        backgroundColor: '#007bff'
+                    },
+                    {
+                        label: 'Jumlah Penduduk (Perempuan)',
+                        data: [15510,21519,31733,17126,38166,31679,26356,16671,27932,25193,47161,38420,26555,24143,25533,32467,17867,20489,18007,22674,15323,16248],
+                        backgroundColor: '#e83e8c'
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Jumlah Penduduk Per Kecamatan di Kabupaten Boyolali (2025)'
+                    },
+                    legend: { position: 'bottom' }
+                },
+                scales: {
+                    y: { beginAtZero: true, title: { display: true, text: 'Jumlah Penduduk' } },
+                    x: { ticks: { autoSkip: false, maxRotation: 60, minRotation: 60 } }
+                }
+            }
+        });
+
+        // === Grafik HLS ===
+        const ctx1 = document.getElementById('hlsChart');
+        new Chart(ctx1, {
+            type: 'bar',
+            data: {
+                labels: ['Laki-laki', 'Perempuan', 'Jumlah'],
+                datasets: [
+                    { label: 'Boyolali', data: [12.39, 13.43, 12.67], backgroundColor: '#2b3384' },
+                    { label: 'Jawa Tengah', data: [12.77, 13.04, 12.86], backgroundColor: '#7f8c8d' }
+                ]
+            },
+            options: {
+                plugins: { title: { display: true, text: 'Perbandingan Harapan Lama Sekolah (HLS) 2024' }, legend: { position: 'bottom' } },
+                scales: { y: { beginAtZero: false, title: { display: true, text: 'Tahun' } } }
+            }
+        });
+
+        // === Grafik RLS ===
+        const ctx2 = document.getElementById('rlsChart');
+        new Chart(ctx2, {
+            type: 'bar',
+            data: {
+                labels: ['Laki-laki', 'Perempuan', 'Jumlah'],
+                datasets: [
+                    { label: 'Boyolali', data: [8.82, 7.61, 8.17], backgroundColor: '#2b3384' },
+                    { label: 'Jawa Tengah', data: [8.43, 7.63, 8.02], backgroundColor: '#7f8c8d' }
+                ]
+            },
+            options: {
+                plugins: { title: { display: true, text: 'Perbandingan Rata-rata Lama Sekolah (RLS) 2024' }, legend: { position: 'bottom' } },
+                scales: { y: { beginAtZero: false, title: { display: true, text: 'Tahun' } } }
+            }
+        });
+    </script>
+</body>
+</html>
